@@ -1,84 +1,222 @@
-# Turborepo starter
+# Task Management Application
 
-This is an official starter Turborepo.
+A full-featured task management application built with the MERN stack (MongoDB, Express, React, Node.js , TypeScript ) and Turborepo. This application provides a beautiful Kanban board interface and allows users to create, read, update, and delete tasks effortlessly.
 
-## Using this example
+---
 
-Run the following command:
+## Table of Contents
 
-```sh
-npx create-turbo@latest
+- [Features](#features)
+- [Installation](#installation)
+- [Running the Project](#running-the-project)
+  - [Backend](#backend)
+  - [Frontend](#frontend)
+- [Backend APIs](#backend-apis)
+  - [Authentication APIs](#authentication-apis)
+  - [Task Management APIs](#task-management-apis)
+- [Mock JSON for Postman](#mock-json-for-postman)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
+
+## Features
+
+- User authentication (Sign Up & Sign In Using JWT).
+- Kanban board for task organization.
+- CRUD functionality for tasks.
+- Real-time updates.
+- TypeScript for type safety and better maintainability.
+
+---
+
+## Installation
+
+To get started with the project, follow these steps:
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/Arham689/task-manager-stuffpie.git
+cd task-manager 
+or download the code
 ```
 
-## What's inside?
-
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
+### 2. Install dependencies for the backend
+Navigate to the backend directory and install the dependencies:
+```bash
+cd apps/server
+npm install
 ```
 
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
+### 3. Install dependencies for the frontend
+Navigate to the frontend directory and install the dependencies:
+```bash
+cd ../client
+npm install
 ```
 
-### Remote Caching
+---
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
+### Otherwise run this in root directory
+```bash
+npm install
+npm run dev
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
 
+## Running the Project
+
+### Backend
+
+#### 1. Set up environment variables
+Create a `.env` file in the `apps/server` directory and add the following variables:
+```env
+MONGODB_URI=mongodb://localhost:27017/mydatabase
+PORT=4000
 ```
-npx turbo link
+
+####  Set up environment variables for frontend
+Create a `.env` file in the `apps/client` directory and add the following variables:
+```env
+VITE_BASE_API_URL="http://localhost:4000/api/v1"
 ```
 
-## Useful Links
+#### 2. Run the backend server
+Navigate to the backend directory and start the server:
+```bash
+cd apps/server
+npm run dev
+```
 
-Learn more about the power of Turborepo:
+### Frontend
 
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+#### Run the frontend application
+Open a new terminal, navigate to the frontend directory, and start the React application:
+```bash
+cd apps/client
+npm run dev
+```
+
+#### Access the application
+Open your browser and navigate to:
+[http://localhost:5173](http://localhost:5173)
+
+---
+
+## Backend APIs
+
+### Authentication APIs
+
+#### Sign Up
+- **Endpoint:** `POST /api/v1/auth/signup`
+- **Request Body:**
+  ```json
+  {
+    "username": "testuser",
+    "email": "testuser@example.com",
+    "password": "password123"
+  }
+  ```
+
+#### Sign In
+- **Endpoint:** `POST /api/v1/auth/signin`
+- **Request Body:**
+  ```json
+  {
+    "email": "testuser@example.com",
+    "password": "password123"
+  }
+  ```
+
+### Task Management APIs
+
+#### Get All Tasks
+- **Endpoint:** `GET /api/v1/tasks`
+- **Response:**
+  ```json
+  [
+    {
+      "_id": "1",
+      "title": "Sample Task",
+      "description": "This is a sample task description.",
+      "status": "TODO",
+    }
+  ]
+  ```
+
+#### Create a Task
+- **Endpoint:** `POST /api/v1/tasks`
+- **Request Body:**
+  ```json
+  {
+    "title": "New Task",
+    "description": "Description of the new task.",
+  }
+  ```
+
+#### Update a Task
+- **Endpoint:** `PUT /api/v1/tasks/:id`
+- **Request Body:**
+  ```json
+  {
+    "title": "Updated Task",
+    "description": "Updated description.",
+  }
+  ```
+
+#### Delete a Task
+- **Endpoint:** `DELETE /api/v1/tasks/:id`
+
+---
+
+## Mock JSON for Postman
+
+### Sign Up Mock Request
+```json
+{
+  "username": "testuser",
+  "email": "testuser@example.com",
+  "password": "password123"
+}
+```
+
+### Sign In Mock Request
+```json
+{
+  "email": "testuser@example.com",
+  "password": "password123"
+}
+```
+
+### Create Task Mock Request
+```json
+{
+  "title": "New Task",
+  "description": "Description of the new task.",
+  "status": "TODO",
+  "tags": []
+}
+```
+
+### Update Task Mock Request
+```json
+{
+  "title": "Updated Task",
+  "description": "Updated description.",
+  "status": "IN_PROGRESS"
+}
+```
+
+---
+
+## Scope of improvment 
+
+
+1. Better folder structure
+2. using state management
+3. better error handling
+4. making a async handler 
+5. better types
+6. can creat custome hooks
+7. Tets can be written using jest
