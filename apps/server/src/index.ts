@@ -12,7 +12,7 @@ const app = express();
 
 
 const corsOptions = {
-    origin: 'http://localhost:5173',
+    origin: 'beautiful-daifuku-4ac812.netlify.app',
     methods: ['GET', 'POST', 'PUT', 'DELETE'], 
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
