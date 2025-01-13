@@ -41,7 +41,7 @@ export default function KanbanBoard() {
         withCredentials: true,
         headers: {
           "Content-Type": "application/json"
-        }
+        },
       });
       setTasks(res.data);
       console.log(res.data)
