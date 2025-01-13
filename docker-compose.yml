@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"  # Change this port if your client runs on a different port
+      - "5173:5173"  # Change this port if your client runs on a different port
     environment:
       NODE_ENV: production
     volumes:
