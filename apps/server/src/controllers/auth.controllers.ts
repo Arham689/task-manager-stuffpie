@@ -1,17 +1,17 @@
-import { Request, Response , CookieOptions } from 'express';
+import { Request, Response, CookieOptions } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.model';
 import { signUpSchema, signInSchema } from '../validation/auth.validation';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key'; 
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
-const cookieOptions  : CookieOptions = {
-    httpOnly: true, 
-    secure: false,
-    sameSite: 'none', 
-    maxAge: 60 * 60 * 1000,  
-};
+// const cookieOptions  : CookieOptions = {
+//     httpOnly: true, 
+//     secure: false,
+//     sameSite: 'none', 
+//     maxAge: 60 * 60 * 1000,  
+// };
 
 export const signup = async (req: Request, res: Response): Promise<any> => {
     const validationData = signUpSchema.parse(req.body);
@@ -39,16 +39,12 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
             { expiresIn: '1h' }
         );
 
-        res.cookie('token', token,  {
-            httpOnly: true,
-            path:"/",
-            domain: "localhost",
-            secure: true,
-            sameSite: "lax", // "strict" | "lax" | "none" (secure must be true)
-            maxAge: 3600000,
-          });
 
-        res.status(201).json({ message: 'User created successfully', token });
+        res.status(201).cookie('token', token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none", // "strict" | "lax" | "none" (secure must be true)
+        }).json({ message: 'User created successfully', token });
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
     }
@@ -75,16 +71,11 @@ export const signin = async (req: Request, res: Response): Promise<any> => {
             { expiresIn: '1h' }
         );
 
-        res.cookie("token", token, {
+        res.status(200).cookie("token", token, {
             httpOnly: true,
-            path:"/",
-            domain: "localhost",
             secure: true,
-            sameSite: "none", // "strict" | "lax" | "none" (secure must be true)
-            maxAge: 3600000,
-          });
-
-        res.status(200).json({
+            sameSite: "none", // "strict" | "lax" | "none" 
+        }).json({
             message: 'Sign-in successful',
             token,
             user: { username: user.username, email: user.email },

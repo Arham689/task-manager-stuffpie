@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import KanbanBoard from '../componets/kanban';
 
 const DashBoard: React.FC = () => {
     const navigate = useNavigate() 
@@ -21,10 +22,8 @@ const DashBoard: React.FC = () => {
         checkAuth();
     }, [navigate]);
   return (
-    <div className='  backgroundImage w-screen h-screen flex items-center justify-center'>    
-      DashBoard
-      <div>
-      </div>
+    <div className=' w-screen h-screen flex items-center justify-center'>    
+        <KanbanBoard/>
     </div>   
   );
 };
