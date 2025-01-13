@@ -1,10 +1,6 @@
 
 import Task from "../models/task.model";
 import { Request, Response } from "express";
-import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
-import User from "../models/user.model";
-
-const JWT_SECRET: Secret = process.env.JWT_SECRET || 'your-secret-key';
 
 export const getTasks = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -38,11 +34,6 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
             description,
         });
         await newTask.save();
-        const task = await Task.findOne({userId : _id })
-        if(!task) return 
-
-        const userUpdateResult = await User.updateOne({ _id  } , { $push: { taskIds: task._id }} )
-       
         res.status(201).json({ message: 'Task created successfully', task: newTask });
     } catch (error) {
         console.error(error);

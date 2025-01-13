@@ -3,7 +3,7 @@ import {  Plus } from 'lucide-react';
 import axios from 'axios';
 import TaskModal from './TaskModal';
 import { toast } from 'react-toastify';
-import {  DndContext, DragEndEvent } from '@dnd-kit/core';
+import {  DndContext, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import Columns from './Columns';
 import type {  Column as ColumnType } from '../types';
 
@@ -101,6 +101,12 @@ export default function KanbanBoard() {
     );
   }
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 10 }
+    })
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-br w-screen from-purple-400 via-blue-400 to-blue-500 p-6">
       <div className=" mx-auto">
@@ -115,7 +121,7 @@ export default function KanbanBoard() {
           </button>
         </div>
 
-        <DndContext  onDragEnd={handleDragEnd}>
+        <DndContext  onDragEnd={handleDragEnd} sensors={sensors} >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {columns.map((column) => {
             return (

@@ -1,4 +1,4 @@
-import { useDraggable } from "@dnd-kit/core";
+import { useDraggable  } from "@dnd-kit/core";
 
 export type Task = {
   _id: string;
@@ -27,15 +27,13 @@ const TaskCard = ({task , handleDeleteTask} : TaskCardProp) => {
         zIndex: isDragging ? 1000 : 'auto',
     };
 
-    const handleDelete = (e: React.MouseEvent) => {
-        console.log(e)
-        handleDeleteTask(task._id);
-      };
-
+ 
   return (
-    <div ref={setNodeRef}
+    <div 
+    ref={setNodeRef}
     {...listeners}
-    {...attributes}>
+    {...attributes}
+    >
       <div
         key={task._id}
         className="bg-white rounded-lg p-4 shadow-sm cursor-move relative"
@@ -60,9 +58,9 @@ const TaskCard = ({task , handleDeleteTask} : TaskCardProp) => {
         </div>
 
         <button
-            onClick={ handleDelete }
+            onClick={ ()=>handleDeleteTask(task._id) }
             
-            className="absolute top-2 right-2 text-red-600 hover:text-red-800 cursor-pointer "
+            className="z-50 absolute top-2 right-2 text-red-600  hover:text-red-800 cursor-pointer "
         >
             Delete
         </button>

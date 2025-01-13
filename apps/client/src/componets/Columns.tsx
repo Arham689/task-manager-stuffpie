@@ -30,7 +30,7 @@ const Columns = ({column , tasks , handleDeleteTask } : ColumnProps) => {
 
   return (
     <div>
-        <div key={column.id} ref={setNodeRef} className="bg-white/10 backdrop-blur-lg rounded-xl p-4">
+        <div key={column.id} ref={setNodeRef} className="bg-white/10  rounded-xl p-4">
             <div className={`bg-gradient-to-r ${column.color} p-3 rounded-lg mb-4`}>
                 <h2 className="text-white font-semibold">{column.title}</h2>
             </div>

@@ -32,7 +32,7 @@ const Signup = () => {
               email,
               password,
             });
-            Cookies.set('token', response.data.token, { expires: 7, secure: true }); // Expires in 7 days, secure for HTTPS
+            Cookies.set('token', response.data.token, { expires: 7, secure: true }); 
             navigate('/dashboard')
             toast.success(response.data.message);
           } catch (err : any) {
@@ -40,13 +40,12 @@ const Signup = () => {
             toast.error(err.response?.data?.message || 'Server error');
           }
         } else {
-          // Handle sign-in logic here
           try {
             const response = await axios.post('http://localhost:4000/api/v1/auth/signin', {
               email,
               password,
             });
-            Cookies.set('token', response.data.token, { expires: 7, secure: true }); // Expires in 7 days, secure for HTTPS
+            Cookies.set('token', response.data.token, { expires: 7, secure: true }); 
             navigate('/dashboard')
             toast.success(response.data.message);
           } catch (err : any) {
@@ -57,7 +56,7 @@ const Signup = () => {
       };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-400 via-blue-400 to-pink-200">
-    <div className="bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-xl w-full max-w-md mx-4">
+    <div className="bg-white/80  p-8 rounded-2xl shadow-xl w-full max-w-md mx-4">
       {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
@@ -70,7 +69,6 @@ const Signup = () => {
         </p>
       </div>
 
-      {/* Error Alert */}
       {error && (
         <div className="mb-4 p-4 bg-red-100 text-red-600 rounded-lg flex items-center gap-2">
           <AlertCircle size={20} />
@@ -78,7 +76,6 @@ const Signup = () => {
         </div>
       )}
 
-      {/* Form */}
       <form className="space-y-4" onSubmit={handleSubmit}>
         {!isSignIn && (
           <div className="space-y-2">
@@ -156,7 +153,6 @@ const Signup = () => {
         </button>
       </form>
 
-      {/* Toggle Auth Mode */}
       <div className="mt-6 text-center">
         <button
           onClick={() => setIsSignIn(!isSignIn)}
@@ -169,7 +165,7 @@ const Signup = () => {
       </div>
     </div>
 
-    {/* Toast Container */}
+
     <CustomToastContainer />
   </div>
   );
