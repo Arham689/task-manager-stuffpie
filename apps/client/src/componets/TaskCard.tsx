@@ -1,20 +1,17 @@
 import { useDraggable  } from "@dnd-kit/core";
-
-export type Task = {
-  _id: string;
-  status: TaskStatus;
-  title: string;
-  description: string;
-};
-
-export type TaskStatus = 'TODO' | 'IN_PROGRESS' | 'DONE';
+import { Trash , Edit } from "lucide-react";
+import EditTaskModal from "./EditTaskModal";
+import { useState } from "react";
+import { Task  , TaskStatus , TaskUpdate } from "../types";
 
 type TaskCardProp = {
     task : Task
     handleDeleteTask: (taskId: string) => void;
+    handleUpdateTask: (updatedTask: Task) => void;
 }
 
-const TaskCard = ({task , handleDeleteTask} : TaskCardProp) => {
+const TaskCard = ({task , handleDeleteTask , handleUpdateTask} : TaskCardProp) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
     const { attributes, listeners, setNodeRef, transform , isDragging } = useDraggable({
         id: task._id,
 
@@ -27,7 +24,10 @@ const TaskCard = ({task , handleDeleteTask} : TaskCardProp) => {
         zIndex: isDragging ? 1000 : 'auto',
     };
 
- 
+    const handleSave = (updatedTask: TaskUpdate & { _id: string; status: TaskStatus , title : string , description : string}) => {
+      handleUpdateTask(updatedTask); 
+    };
+
   return (
     <div 
     ref={setNodeRef}
@@ -42,30 +42,30 @@ const TaskCard = ({task , handleDeleteTask} : TaskCardProp) => {
         <p className="text-sm text-gray-600 mt-1">
             {task.description}
         </p>
-        <div className="flex flex-wrap gap-2 mt-2">
-        {/* {task.tags && task.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-2">
-                    {task.tags.map((tag) => (
-                        <span
-                            key={tag}
-                            className={`text-xs px-2 py-1 rounded-full ${tagColors[tag as keyof typeof tagColors]}`}
-                        >
-                            {tag}
-                        </span>
-                    ))}
-                </div>
-            )} */}
-        </div>
+        
 
         <button
             onClick={ ()=>handleDeleteTask(task._id) }
             
-            className="z-50 absolute top-2 right-2 text-red-600  hover:text-red-800 cursor-pointer "
+            className=" absolute top-2 right-2 text-red-600  hover:text-red-800 cursor-pointer "
         >
-            Delete
+            <Trash/>
         </button>
-
+        
+        <button
+            className=" absolute top-2 right-10 text-gray-600  hover:text-blue-800 cursor-pointer "
+            onClick={()=>setIsModalOpen(true)}
+        >
+            <Edit/>
+        </button>
+        
         </div>
+        <EditTaskModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          task={task}
+          onSave={handleSave}
+        />
     </div>
   )
 }

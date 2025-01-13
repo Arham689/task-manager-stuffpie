@@ -6,6 +6,7 @@ import { ToastContainer, toast , ToastContainerProps } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+const base_url = import.meta.env.VITE_BASE_API_URL 
 
 const Signup = () => {
     const [isSignIn, setIsSignIn] = useState(true);
@@ -27,7 +28,7 @@ const Signup = () => {
           }
     
           try {
-            const response = await axios.post('http://localhost:4000/api/v1/auth/signup', {
+            const response = await axios.post(`${base_url}/auth/signup`, {
               username,
               email,
               password,
@@ -41,7 +42,7 @@ const Signup = () => {
           }
         } else {
           try {
-            const response = await axios.post('http://localhost:4000/api/v1/auth/signin', {
+            const response = await axios.post(`${base_url}/auth/signin`, {
               email,
               password,
             });
@@ -57,7 +58,6 @@ const Signup = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-400 via-blue-400 to-pink-200">
     <div className="bg-white/80  p-8 rounded-2xl shadow-xl w-full max-w-md mx-4">
-      {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
           {isSignIn ? 'Welcome Back' : 'Create Account'}

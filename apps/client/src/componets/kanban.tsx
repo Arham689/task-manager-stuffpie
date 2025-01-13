@@ -5,7 +5,10 @@ import TaskModal from './TaskModal';
 import { toast } from 'react-toastify';
 import {  DndContext, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import Columns from './Columns';
-import type {  Column as ColumnType } from '../types';
+import type {  Column as ColumnType, TaskStatus , TaskUpdate } from '../types';
+
+import { NavLink } from 'react-router-dom';
+const base_url = import.meta.env.VITE_BASE_API_URL 
 
 interface Task {
   _id: string;
@@ -22,14 +25,6 @@ const columns : ColumnType[]  = [
   { id: 'DONE', title: 'Done', color: 'from-green-400 to-green-300' },
 ];
 
-const tagColors = {
-  'High Priority': 'bg-red-100 text-red-800',
-  'Medium Priority': 'bg-yellow-100 text-yellow-800',
-  'Low Priority': 'bg-green-100 text-green-800',
-  'Bug': 'bg-purple-100 text-purple-800',
-  'Feature': 'bg-blue-100 text-blue-800',
-};
-
 export default function KanbanBoard() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isNewTaskModalOpen, setIsNewTaskModalOpen] = useState(false);
@@ -39,9 +34,10 @@ export default function KanbanBoard() {
     fetchTasks();
   }, []);
 
+
   const fetchTasks = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/api/v1/tasks", {
+      const res = await axios.get(`${base_url}/tasks`, {
         withCredentials: true,
         headers: {
           "Content-Type": "application/json"
@@ -55,19 +51,10 @@ export default function KanbanBoard() {
     }
   };
 
-  const toggleTag = (tag: string) => {
-    setNewTask(prev => ({
-      ...prev,
-      tags: prev.tags.includes(tag)
-        ? prev.tags.filter(t => t !== tag)
-        : [...prev.tags, tag]
-    }));
-  };
-
   const handleDeleteTask = async (taskId: string) => {
     console.log('Delete initiated for task:', taskId); 
     try {
-      await axios.delete(`http://localhost:4000/api/v1/tasks/${taskId}`, {
+      await axios.delete(`${base_url}/tasks/${taskId}`, {
         withCredentials: true,
         headers: {
           "Content-Type": "application/json"
@@ -81,25 +68,81 @@ export default function KanbanBoard() {
     }
   };
 
-  function handleDragEnd(event: DragEndEvent) {
+  async function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
-
+  
     if (!over) return;
-
+  
     const taskId = active.id as string;
     const newStatus = over.id as Task['status'];
+  
+    try {
 
-    setTasks(() =>
-      tasks.map((task) =>
-        task._id === taskId
-          ? {
-              ...task,
-              status: newStatus,
-            }
-          : task,
-      ),
-    );
+      const response = await axios.put(
+        `${base_url}/tasks/${taskId}`,
+        {
+          status: newStatus
+        },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+      );
+  
+      if (response.status === 200) {
+       
+        setTasks(prevTasks =>
+          prevTasks.map((task) =>
+            task._id === taskId
+              ? { ...task, status: newStatus }
+              : task
+          )
+        );
+        toast.success('Task status updated successfully');
+      }
+    } catch (error) {
+      console.error('Error updating task status:', error);
+      toast.error('Failed to update task status');
+      
+      fetchTasks(); 
+    }
   }
+
+
+  const handleUpdateTask = async (updatedTask: TaskUpdate & { _id: string; status: TaskStatus }) => {
+    try {
+      // Make a PUT request to update the task
+      const response = await axios.put(`${base_url}/tasks/${updatedTask._id}`, {
+        title: updatedTask.title,
+        description: updatedTask.description,
+        status: updatedTask.status, 
+      }, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+  
+      if (response.status === 200) {
+
+        setTasks(prevTasks =>
+          prevTasks.map(task =>
+            task._id === updatedTask._id ? { ...task, ...updatedTask } : task
+          )
+        );
+        toast.success('Task updated successfully');
+      }
+    } catch (error ) {
+      if (axios.isAxiosError(error)) {
+        console.error('Error updating task:', error.response?.data || error.message);
+      } else {
+        console.error('Error updating task:', error);
+      }
+      toast.error('Failed to update task');
+    }
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -108,10 +151,10 @@ export default function KanbanBoard() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br w-screen from-purple-400 via-blue-400 to-blue-500 p-6">
+    <div className="min-h-screen bg-gradient-to-br w-screen from-purple-500 via-blue-300 to-blue-500 p-6">
       <div className=" mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl font-bold text-white">Task Board</h1>
+          <h1 className="text-2xl font-bold text-white">  <NavLink to={'/'}>Task Board</NavLink></h1>
           <button
             onClick={() => setIsNewTaskModalOpen(true)}
             className="bg-white text-purple-600 rounded-lg px-4 py-2 flex items-center gap-2 shadow-lg"
@@ -130,6 +173,7 @@ export default function KanbanBoard() {
                 column={column}
                 tasks={tasks.filter((task) => task.status === column.id)}
                 handleDeleteTask={handleDeleteTask}
+                handleUpdateTask={handleUpdateTask}
               />
             );
           })}
@@ -141,8 +185,6 @@ export default function KanbanBoard() {
             setIsNewTaskModalOpen={setIsNewTaskModalOpen}
             newTask={newTask}
             setNewTask={setNewTask}
-            toggleTag={toggleTag}
-            tagColors={tagColors}
             onTaskAdded={fetchTasks}
           />
         )}

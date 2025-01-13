@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"  # Change this port if your client runs on a different port
+    environment:
+      NODE_ENV: production
+    volumes:
+      - .:/app
+    command: npm run dev  # or npm start if it's a production build
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"  # Change this port if your server runs on a different port
+    environment:
+      NODE_ENV: production
+    volumes:
+      - .:/app
+    command: npm run dev  # or npm start if it's a production build

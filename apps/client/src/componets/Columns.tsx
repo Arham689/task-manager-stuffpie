@@ -1,28 +1,17 @@
 import { useDroppable } from '@dnd-kit/core';
 import TaskCard from './TaskCard';
-
+import { Task , ColumnType  } from '../types';
 export type TaskStatus = 'TODO' | 'IN_PROGRESS' | 'DONE';
 
-export type Task = {
-  _id: string;
-  status: TaskStatus;
-  title: string;
-  description: string;
-};
-
-export type ColumnType = {
-  id: TaskStatus;
-  title: string;
-  color : string 
-};
 
 type ColumnProps = {
     column: ColumnType;
     tasks: Task[];
     handleDeleteTask: (taskId: string) => void;
+     handleUpdateTask: (updatedTask: Task) => void;
   };
 
-const Columns = ({column , tasks , handleDeleteTask } : ColumnProps) => {
+const Columns = ({column , tasks , handleDeleteTask , handleUpdateTask} : ColumnProps) => {
     const { setNodeRef } = useDroppable({
         id: column.id,
       });
@@ -39,7 +28,7 @@ const Columns = ({column , tasks , handleDeleteTask } : ColumnProps) => {
                 {tasks
                 .filter((task) => task.status === column.id)
                 .map((task) => (
-                    <TaskCard key={task._id} task={task} handleDeleteTask={handleDeleteTask} />
+                    <TaskCard key={task._id} task={task} handleDeleteTask={handleDeleteTask}  handleUpdateTask={handleUpdateTask} />
                 ))}
             </div>
         </div>

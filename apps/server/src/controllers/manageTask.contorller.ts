@@ -43,15 +43,20 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
 
 export const updateTask = async (req: Request, res: Response): Promise<void> => {
     try {
-        
-        const {_id , email } = req.user || {};
-        const { taskId } = req.params; 
-        const { title, description } = req.body;
+        const { _id } = req.user || {};
+        const { taskId } = req.params;
+        const { status, title, description } = req.body;
+
+        // Create update object based on what was sent
+        const updateData: any = {};
+        if (status !== undefined) updateData.status = status;
+        if (title !== undefined) updateData.title = title;
+        if (description !== undefined) updateData.description = description;
 
         // Find the task and update it
         const updatedTask = await Task.findOneAndUpdate(
-            { _id: taskId, userId : _id  },
-            { title, description },
+            { _id: taskId, userId: _id },
+            updateData,
             { new: true }
         );
 
@@ -60,9 +65,12 @@ export const updateTask = async (req: Request, res: Response): Promise<void> => 
             return;
         }
 
-        res.status(200).json({ message: 'Task updated successfully', task: updatedTask });
+        res.status(200).json({ 
+            message: 'Task updated successfully', 
+            task: updatedTask 
+        });
     } catch (error) {
-        console.error(error);
+        console.error('Error updating task:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };

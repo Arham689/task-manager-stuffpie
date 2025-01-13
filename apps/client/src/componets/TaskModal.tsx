@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { X } from 'lucide-react';
 import { toast } from 'react-toastify';
-
+const base_url = import.meta.env.VITE_BASE_API_URL 
 interface Task {
   title: string;
   description: string;
@@ -13,8 +13,6 @@ interface TaskModalProps {
   setIsNewTaskModalOpen: (isOpen: boolean) => void;
   newTask: Task;
   setNewTask: (task: Task) => void;
-  toggleTag: (tag: string) => void;
-  tagColors: Record<string, string>;
   onTaskAdded: () => void;
 }
 
@@ -22,8 +20,6 @@ const TaskModal: React.FC<TaskModalProps> = ({
   setIsNewTaskModalOpen,
   newTask,
   setNewTask,
-  toggleTag,
-  tagColors,
   onTaskAdded,
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -34,7 +30,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
     setIsSubmitting(true);
     try {
       await axios.post(
-        'http://localhost:4000/api/v1/tasks',
+        `${base_url}/tasks`,
         {
           title: newTask.title,
           description: newTask.description,
@@ -100,26 +96,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
               rows={3}
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Tags
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {Object.keys(tagColors).map((tag) => (
-                <button
-                  key={tag}
-                  onClick={() => toggleTag(tag)}
-                  className={`text-xs px-2 py-1 rounded-full ${
-                    newTask.tags.includes(tag)
-                      ? tagColors[tag as keyof typeof tagColors]
-                      : 'bg-gray-100 text-gray-800'
-                  }`}
-                >
-                  {tag}
-                </button>
-              ))}
-            </div>
-          </div>
+
           <button
             onClick={handleAddTask}
             disabled={isSubmitting}
