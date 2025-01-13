@@ -14,9 +14,7 @@ const app = express();
 const corsOptions = {
     origin: 'https://beautiful-daifuku-4ac812.netlify.app',
     methods: ['GET', 'POST', 'PUT', 'DELETE'], 
-    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
-    exposedHeaders: ['set-cookie'],
 };
   
 app.use(cors(corsOptions));
