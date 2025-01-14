@@ -5,7 +5,7 @@ import authRoutes from './routes/auth.routes'
 import cors from 'cors';
 import cookieParser from 'cookie-parser'; 
 import manageTasks from './routes/manageTasks.route'
-import {serveStatic} from "./middleware/serveStatic"
+
 dotenv.config(); 
 
 const PORT = process.env.PORT || 3001;
@@ -17,7 +17,7 @@ const corsOptions = {
     methods: ['GET', 'POST', 'PUT', 'DELETE'], 
     credentials: true,
 };
-app.use(serveStatic())
+
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser()); 
