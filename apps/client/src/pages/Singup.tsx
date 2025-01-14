@@ -45,8 +45,10 @@ const Signup = () => {
             const response = await axios.post(`${base_url}/auth/signin`, {
               email,
               password,
-            });
-            Cookies.set('token', response.data.token, { expires: 7, secure: true }); 
+            } , {withCredentials : true , headers : { "Content-Type" : "application/json" } }  );
+
+            // Cookies.set('token', response.data.token, { expires: 7, secure: true }); 
+
             navigate('/dashboard')
             toast.success(response.data.message);
           } catch (err : any) {

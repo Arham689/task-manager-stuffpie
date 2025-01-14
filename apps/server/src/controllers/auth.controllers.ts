@@ -43,7 +43,7 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
         res.status(201).cookie('token', token, {
             httpOnly: true,
             secure: true,
-            sameSite: "strict", // "strict" | "lax" | "none" (secure must be true)
+            sameSite: "none", // "strict" | "lax" | "none" (secure must be true)
         }).json({ message: 'User created successfully', token });
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
@@ -74,7 +74,7 @@ export const signin = async (req: Request, res: Response): Promise<any> => {
         res.status(200).cookie("token", token, {
             httpOnly: true,
             secure: true,
-            sameSite: "strict", // "strict" | "lax" | "none" 
+            sameSite: "none", // "strict" | "lax" | "none" 
         }).json({
             message: 'Sign-in successful',
             token,
