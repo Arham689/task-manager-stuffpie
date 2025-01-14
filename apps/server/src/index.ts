@@ -13,7 +13,7 @@ const app = express();
 
 
 const corsOptions = {
-    origin: ['https://beautiful-daifuku-4ac812.netlify.app', 'http://localhost:4000'],
+    origin: [ 'http://localhost:4000' , 'https://dapper-heliotrope-04078e.netlify.app'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'], 
     credentials: true,
 };
