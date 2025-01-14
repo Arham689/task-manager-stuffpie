@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "build": "rm -rf dist & tsc -p tsconfig.json",
+    "start": " node dist/index.js",
     "dev": "nodemon src/index.ts",
     "test": "jest"
   },
@@ -26,14 +28,15 @@
     "typescript": "^5.7.3"
   },
   "dependencies": {
-    "cookie-parser": "^1.4.6",
     "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.4",
     "nodemon": "^3.1.9",
+    "path-to-regexp": "^8.2.0",
     "zod": "^3.24.1"
   }
 }
