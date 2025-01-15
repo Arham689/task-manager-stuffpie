@@ -210,6 +210,13 @@ Open your browser and navigate to:
 
 ---
 
+## run the server using docker  
+ open the docker dashboard app local 
+ then in the project go to apps/server 
+ ```bash
+    docker-compose up --build
+```
+ 
 ## Scope of improvment 
 
 
