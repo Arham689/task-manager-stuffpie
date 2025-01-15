@@ -74,6 +74,7 @@ Create a `.env` file in the `apps/server` directory and add the following variab
 ```env
 MONGODB_URI=mongodb://localhost:27017/mydatabase
 PORT=4000
+JWT_SECRET=your-secret-key
 ```
 
 ####  Set up environment variables for frontend
