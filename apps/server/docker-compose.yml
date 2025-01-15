@@ -9,7 +9,7 @@ services:
       - "4000:4000"
     environment:
       - PORT=4000
-      - MONGODB_URI=mongodb+srv://abdularham689:01xAiJuuv77KikvX@cluster0.k72dk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      - MONGODB_URI=mongodb db url please enter 
       - JWT_SECRET=your-secret-key
     volumes:
       - .:/usr/src/app
